@@ -1,7 +1,6 @@
 package com.ndtinh.demo.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +17,7 @@ public class BookController {
 	@Autowired
 	private BookService bookService; 
 	
-	private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+	private static final Logger logger = Logger.getLogger(BookController.class);
 	
 	
 	/*
@@ -35,7 +34,7 @@ public class BookController {
 	
 	@PostMapping("/book")
 	public ResponseEntity<Object> createBook(@RequestBody BookModel book) {
-		logger.debug("Create The Book {}: ", book);
+		logger.debug("Create The Book " + book);
 		
 		return bookService.createBook(book);
 	}

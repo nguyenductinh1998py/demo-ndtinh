@@ -1,0 +1,4 @@
+2022-06-27 14:41:16 DEBUG BookController:30 - GET LIST
+2022-06-27 14:41:34 DEBUG BookController:37 - Create The Book com.ndtinh.demo.model.BookModel@68215b43
+2022-06-27 14:41:34 WARN  BookServiceImpl:53 - In - book com.ndtinh.demo.model.BookModel@68215b43
+2022-06-27 14:41:34 DEBUG BookServiceImpl:66 - Out - result com.ndtinh.demo.dto.BookDTO@6fe972b1

@@ -2,16 +2,17 @@ package com.ndtinh.demo.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.ndtinh.demo.controller.BookController;
 import com.ndtinh.demo.dto.BookDTO;
+import com.ndtinh.demo.entity.Author;
 import com.ndtinh.demo.entity.Book;
 import com.ndtinh.demo.model.BookModel;
+import com.ndtinh.demo.repository.AuthorRepository;
 import com.ndtinh.demo.repository.BookRepository;
 import com.ndtinh.demo.service.BookService;
 
@@ -22,9 +23,12 @@ public class BookServiceImpl implements BookService {
 	private BookRepository bookRepository;
 	
 	@Autowired
+	private AuthorRepository authorRepository;
+	
+	@Autowired
 	private ModelMapper modelMapper;
 	
-	private static final Logger logger = LoggerFactory.getLogger(BookController.class);
+	private static final Logger logger = Logger.getLogger(BookServiceImpl.class);
 	
 	/*
 	 * Get List Book
@@ -46,18 +50,20 @@ public class BookServiceImpl implements BookService {
 	 * */
 	@Override
 	public ResponseEntity<Object> createBook(BookModel bookM) {
-		logger.warn("In - book {}", bookM);
+		logger.warn("In - book " + bookM);
 		BookDTO bookDTO = new BookDTO();
-		Book book = modelMapper.map(bookM, Book.class);
-		System.out.println(book.getId());
-		System.out.println(book.getName());
-		try {
-			bookRepository.save(book);
-		} catch(IllegalArgumentException e) {
-			return ResponseEntity.status(400).body("Not Found");
+		Author author = authorRepository.findByName(bookM.getAuthorName());
+		if (author == null) {
+			return ResponseEntity.status(400).body("Bad Request");
 		}
-		bookDTO = modelMapper.map(bookM, BookDTO.class);
-		logger.debug("Out - result {}", bookDTO);
+		Book book = modelMapper.map(bookM, Book.class);
+		book.setAuthor(author);
+		try {
+			bookDTO = modelMapper.map(bookRepository.save(book), BookDTO.class);
+		} catch(IllegalArgumentException e) {
+			
+		}
+		logger.debug("Out - result " + bookDTO);
 		return ResponseEntity.status(200).body(bookDTO);
 	}
 
