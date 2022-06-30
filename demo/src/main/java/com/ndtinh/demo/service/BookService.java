@@ -9,5 +9,6 @@ import com.ndtinh.demo.model.BookModel;
 
 public interface BookService {
 	public List<BookDTO> getListBook();
+	public List<BookDTO> findBookByNameQueryDSL(String name);
 	public ResponseEntity<Object> createBook(BookModel book);
 }

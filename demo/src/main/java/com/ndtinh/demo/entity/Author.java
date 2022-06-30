@@ -31,5 +31,5 @@ public class Author {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
 	private List<Book> book = new ArrayList<>();
-
+	
 }
