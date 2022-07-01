@@ -1,44 +1,61 @@
 package com.ndtinh.demo.controller;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.io.IOException;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import org.junit.jupiter.api.Test;
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import com.ndtinh.demo.service.BookService;
 
+@WebMvcTest(BookController.class)
 public class BookControllerTests {
+
+	@Autowired
+	private MockMvc mvc;
+
+	@MockBean
+	private BookService bookService;
+
 	@Test
-	public void getBookTest() 
-			throws ClientProtocolException, IOException {
-		// Set authorization header for request
-		RequestSpecification httpRequest = 
-				RestAssured.given().auth().preemptive().basic("admin", "12345678");
-		// Send get method
-	    Response res = httpRequest.get("http://localhost:8888/book");
-	    // Check the status of the response method
-		assertEquals(
-				res.getStatusCode(),
-			    HttpStatus.SC_OK);
+	public void testGetBook() throws Exception {
+		// Add authorization headers
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setBasicAuth("admin", "12345678");
+		// Check response
+		this.mvc.perform(get("/book")
+				.headers(httpHeaders))
+		.andExpect(status().isOk());
 	}
-	
+
 	@Test
-	public void postBookTest() throws ClientProtocolException, IOException {
-		// Set authorization header for request
-		RequestSpecification httpRequest = 
-				RestAssured.given().auth().preemptive().basic("admin", "12345678");
-		// Fake Json body
+	public void testPostBook() throws Exception {
+		// Add authorization headers
+		HttpHeaders httpHeaders = new HttpHeaders();
+		httpHeaders.setBasicAuth("admin", "12345678");
+		// Fake json
 		String json = "{\"id\" : 8, \"name\" : \"The Book 8\", \"price\" : 123.1, \"author\" : \"Con khi\"}";
-		// Set post method with ContendType as JsonObject and body as fake Json
-		httpRequest.contentType("application/json").body(json);
-		// Send post method
-	    Response res = httpRequest.post("http://localhost:8888/book");
-	    // Check the status of the response method
-	    assertEquals(
-				res.getStatusCode(),
-			    HttpStatus.SC_OK);
+		// Check response
+		this.mvc.perform(post("/book")
+				.headers(httpHeaders)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+		.andExpect(status().isOk());
 	}
 	
+	@Test
+	public void testGetBookByUsingQueryDsl() throws Exception {
+		// Add authorization headers
+		HttpHeaders httpHears = new HttpHeaders();
+		httpHears.setBasicAuth("admin", "12345678");
+		// Check response
+		this.mvc.perform(get("/book/")
+				.headers(httpHears))
+		.andExpect(status().isOk());
+	}
+
 }

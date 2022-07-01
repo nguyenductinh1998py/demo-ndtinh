@@ -8,6 +8,5 @@ public interface AuthorService {
 	public AuthorDTO getQueryDsl(long id);
 	public List<AuthorDTO> getAllQueryDsl();
 	public boolean updateQueryDsl(long id ,AuthorDTO authorDTO);
-	public AuthorDTO deleteQueryDsl(Long id);
-	public boolean insertQueryDsl(AuthorDTO authorDTO);
+	public boolean deleteQueryDsl(Long id);
 }

@@ -40,7 +40,7 @@ public class BookController {
 	 * */
 	@PostMapping("/book")
 	public ResponseEntity<Object> createBook(@RequestBody BookModel book) {
-		logger.debug("Create The Book " + book);
+		logger.debug("CREATE THE BOOK " + book);
 		
 		return bookService.createBook(book);
 	}
@@ -52,6 +52,7 @@ public class BookController {
 	 * */
 	@GetMapping("/book/query-dsl/{name}")
 	public ResponseEntity<Object> getBookQueryDSL(@PathVariable String name) {
+		logger.debug("GET THE BOOK BY NAME" + name);
 		return ResponseEntity.status(200)
 				.body(bookService.findBookByNameQueryDSL(name));
 	}

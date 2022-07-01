@@ -70,7 +70,7 @@ public class AuthorServiceImpl implements AuthorService{
 
 	@Override
 	@Transactional
-	public AuthorDTO deleteQueryDsl(Long id) {
+	public boolean deleteQueryDsl(Long id) {
 		// Init query
 		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 		// Init Querydsl query type for Author
@@ -78,25 +78,9 @@ public class AuthorServiceImpl implements AuthorService{
 		// Check success
 		long check = queryFactory.delete(qAuthor).where(qAuthor.id.eq(id)).execute();
 		if (check > 0) {
-			Author author = queryFactory.select(qAuthor).where(qAuthor.id.eq(id)).fetchFirst();
-			return modelMapper.map(author, AuthorDTO.class);
-		}
-		return null;
-	}
-
-	@Override
-	@Transactional
-	public boolean insertQueryDsl(AuthorDTO authorDTO) {
-		// Init query
-		JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-		// Init Querydsl query type for Author
-		QAuthor qAuthor = QAuthor.author;
-		// Check success
-		Long check = queryFactory.insert(qAuthor).values(authorDTO).execute();
-		if (check > 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 }
